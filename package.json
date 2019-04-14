@@ -1,0 +1,32 @@
+{
+  "name": "anydoor",
+  "version": "1.0.0",
+  "description": "This is node practice",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
+    "lint-fix": "eslint --fix ."
+  },
+  "pre-commit": [
+    "lint-fix",
+    "lint"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YangXinxiang/node-anydoor.git"
+  },
+  "author": "Xinxiang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/YangXinxiang/node-anydoor/issues"
+  },
+  "homepage": "https://github.com/YangXinxiang/node-anydoor#readme",
+  "devDependencies": {
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "estraverse": "^4.2.0",
+    "optionator": "^0.8.2",
+    "pre-commit": "^1.2.2"
+  }
+}
