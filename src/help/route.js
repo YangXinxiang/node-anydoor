@@ -2,6 +2,7 @@ const fs = require("fs");
 const promisify = require("util").promisify;
 const path = require("path");
 const handlebars = require("handlebars");
+const compress = require("./compress");
 //const config = require("../config/defaultConfig");
 const mime = require("./mime");
 const readdir = promisify(fs.readdir);
@@ -18,8 +19,10 @@ module.exports = async function(req,res,filePath,reqUrl){
         if(stats.isFile()){
             res.statusCode = 200;
             const mimeType = mime(filePath);
-            res.setHeader("Content-Type",mimeType);        
-            fs.createReadStream(filePath).pipe(res);    
+            res.setHeader("Content-Type",mimeType); 
+            let rs = fs.createReadStream(filePath);   
+            let newrs = compress(rs,req,res);    
+            newrs.pipe(res);    
         }else if (stats.isDirectory()){            
             const files = await readdir(filePath);
             res.statusCode = 200;
@@ -41,10 +44,10 @@ module.exports = async function(req,res,filePath,reqUrl){
             res.end(rst);
         }
 
-    }catch(e){
+    }catch(ex){
         res.statusCode = 404;
         res.setHeader("Content-Type","text/html");
-        res.write("<html><body>");
+        res.write(`<html>${ex.toString()}<body>`);
         res.write(`${filePath} is not a directory or file!`);
         res.end("</body></html>");
     }    
