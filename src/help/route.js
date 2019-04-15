@@ -3,6 +3,7 @@ const promisify = require("util").promisify;
 const path = require("path");
 const handlebars = require("handlebars");
 //const config = require("../config/defaultConfig");
+const mime = require("./mime");
 const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat);
 
@@ -16,7 +17,8 @@ module.exports = async function(req,res,filePath,reqUrl){
         const stats = await stat(filePath);
         if(stats.isFile()){
             res.statusCode = 200;
-            res.setHeader("Content-Type","text/plain");        
+            const mimeType = mime(filePath);
+            res.setHeader("Content-Type",mimeType);        
             fs.createReadStream(filePath).pipe(res);    
         }else if (stats.isDirectory()){            
             const files = await readdir(filePath);
